@@ -194,17 +194,18 @@ BinaryTreeNode* GetNext(BinaryTreeNode* pNode){
 	}
 	
 	BinaryTreeNode* pNext = nullptr;
+	//如果该节点有右子树，那它的下一个节点就是其右子树的最左节点
 	if(pNode->m_pRight != nullptr){
 		BinaryTreeNode* pRight = pNode->m_pRight;
 		while(pRight->m_pLeft != nullptr){
 			pRight = pRight->m_pLeft;
 		}
 		pNext = pRight;
-	}
+	}//如果该节点既没有右子树，并且它还是父节点右子节点，就需要父节点向上遍历，找到一个它父节点的左子树的节点。如果该节点存在，那么这个节点存在，它的父节点就是要找的节点。
 	else if(pNode->m_pParent != nullptr){
 		BinaryTreeNode* pCurrent = pNode;
 		BinaryTreeNode* pParent = pNode->m_pParent;
-		while(pParent != nullptr && pCurrent == pParent->m_pParent){
+		while(pParent != nullptr && pCurrent == pParent->m_pRight){
 			pCurrent = pParent;
 			pParent = pParent->m_pParent;
 		}
@@ -212,6 +213,51 @@ BinaryTreeNode* GetNext(BinaryTreeNode* pNode){
 	}
 	return pNext;
 }
+
+//用两个栈实现队列<9>
+template <typename T>
+class CQueue{
+public:
+	CQueue();
+	~CQueue();
+	
+	void appendTail(const T& node);
+	T deleteHead();
+	
+private:
+	stack<T> stack1;
+	stack<T> stack2;
+};
+
+template <class T>
+void CQueue<T>::appendTail(const T& element){
+	stack1.push(element);
+}
+
+template <class T>
+T CQueue<T>::deleteHead(){
+	
+	if(stack2.size() <= 0)
+	{
+		while(stack1.size() > 0)
+		{
+			T& data = stack1.top();
+			stack1.pop();
+			stack2.push(data);
+		}
+	}
+	
+	if(stack2.size == 0){
+		throw new exception("queue is empty");
+	}
+	T head = stack2.top();
+	stack2.pop();
+	
+	return head;
+}
+
+//两个队列实现一个栈
+
 
 
 
