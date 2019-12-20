@@ -257,8 +257,57 @@ T CQueue<T>::deleteHead(){
 }
 
 //两个队列实现一个栈
+template <typename T>
+class CStack{
+public:
+	T& top();
+	void push(const T&);
+	
+private:
+	queue<T> queue1;
+	queue<T> queue2;
+};
 
+T& CStack<T>::top(){
+	T topData;
+	if(queue1.size() == 0 && queue2.size == 0){
+		throw new exception("stack is empty");
+	}
+	else if(queue1.size() > 0 && queue2.size() == 0){
+		while(queue1.size() > 1){
+			T front;
+			front = queue1.front();
+			queue1.pop();
+			queue2.push_back(front);
+		}
+		topData = queue1.front();
+		queue1.pop();
+	}
+	else if(queue1.size() == 0 && queue2.size() > 0){
+		while(queue2.size() > 1){
+			T front;
+			front = queue2.front();
+			queue2.pop();
+			queue1.push_back(front);
+		}
+		topData = queue2.front();
+		queue2.pop();
+	}
+	
+	return topData;
+}
 
+void CStack<T>::push(const T& element){
+	if(queue1.empty() && queue2.empty()){
+		queue1.push_back(element);
+	}
+	else if(queue1.empty() && !queue2.empty()){
+		queue2.push_back(element);
+	}
+	else if(!queue1.empty() && queue2.empty()){
+		queue1.push_back(element);
+	}
+}
 
 
 
