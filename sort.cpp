@@ -411,7 +411,7 @@ int Min(int* numbers, int length)
 	
 	int index1 = 0;
 	int index2 = length - 1;
-	int indexMid = index1;
+	int indexMid = index1;	`
 	while(numbers[index1] >= numbers[index2]){
 		if(index2 - index1 == 1)
 		{
@@ -456,14 +456,57 @@ bool hasPath(char* matrix, int rows, int cols, char* str){
 	int pathLength = 0;
 	for(int row = 0; row < rows; ++row){
 		for(int col = 0; col < cols; ++col){
-			if()
+			if(hasPathCore(matrix, rows, cols, row, col, str, pathLength, visited)){
+				delete [] visited;
+				return true;
+			}
 		}
 	}
+	delete [] visited;
+	return false;
+}
+bool hasPathCore(char* matrix, int rows, int cols, int row, int col, const char* str, int& pathLength, bool* visited){
+	if(str[pathLength] == '\0'){
+		return true;
+	}
+	
+	if(row >= 0 && rows > row && col >= 0 && cols > col && matrix[row*cols + col] == str[pathLength] && !visited[row*cols + col]){
+		pathLength++;
+		visited[row*cols + col] = true;
+		
+		bool hasPath = hasPathCore(matrix, rows, cols, row + 1, col, str, pathLength, visited)
+						|| hasPathCore(matrix, rows, cols, row - 1, col, str, pathLength, visited)
+						|| hasPathCore(matrix, rows, cols, row, col + 1, str, pathLength, visited)
+						|| hasPathCore(matrix, rows, cols, row, col - 1, str, pathLength, visited);
+		if(!hasPath){
+			pathLength--;
+			visited[row*cols + col] = false;
+		}
+	}
+	return hasPath;
 }
 
 
-
-
+//二叉树中序遍历的非递归实现
+//遇到一个节点就把它压栈，并去遍历它的左子树；当左子树遍历结束时，从栈顶弹出一个节点并访问它；然后按其右指针再去中序遍历该节点的右子树
+void InOrderTraversal(BinaryTreeNode* BT){
+	BinaryTreeNode* tree = BT;
+	stack<BinaryTreeNode*> TreeStack;
+	
+	while(tree || !TreeStack.empty()){
+		while(tree){
+			TreeStack.push(tree);
+			tree = tree->m_pLeft;
+		}
+		if(!TreeStack.empty()){
+			tree = TreeStack.top();
+			std::cout << tree->data << endl;;
+			TreeStack.pop();
+			tree = tree->m_pRight;
+		}
+	}
+	
+}
 
 
 
