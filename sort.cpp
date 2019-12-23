@@ -505,7 +505,53 @@ void InOrderTraversal(BinaryTreeNode* BT){
 			tree = tree->m_pRight;
 		}
 	}
+}
+
+//机器人的运动范围<13>
+int movingCount(int threshold, int rows, int cols){
+	if(threshold < 0 || rows <= 0 || cols <= 0){
+		return 0;
+	}
+	bool* visit = new bool[rows * cols];
+	for(int i = 0; i < rows * cols; ++i){
+		visit[i] = false;
+	}
 	
+	int count = movingCountCore(threshold, rows, cols, 0, 0, visit);
+	
+	delete [] visit;
+	return count;
+}
+
+int movingCountCore(int threshold, int rows, int cols, int row, int col, bool* visit){
+	int count = 0;
+	if(check(threshold, rows, cols, row, col, visit)){
+		visit[row*cols + col] = true;
+		
+		count = 1 + movingCountCore(threshold, rows, cols, row+1, col, visit)
+				  + movingCountCore(threshold, rows, cols, row-1, col, visit)
+				  + movingCountCore(threshold, rows, cols, row, col+1, visit)
+				  + movingCountCore(threshold, rows, cols, row, col-1 visit);
+	}
+	return count;
+}
+
+bool check(int threshold, int rows, int cols, int row, int col, bool* visit){
+	if(rows > 0 && row <= rows && cols > 0 && col >= cols
+		&& !visit(row*cols+col) && getDigitSum(col) + getDigitSum(row) < threshold)
+	{
+		return true;
+	}
+	return false;
+}
+
+int getDigitSum(int num){
+	int sum = 0;
+	while(num){
+		sum += (num%10);
+		num = num/10;
+	}
+	return sum;
 }
 
 
