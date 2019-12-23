@@ -1,7 +1,6 @@
 //线性表----数组描述
 
-//arrayList的实现
-
+/**********************arrayList的实现***********************/
 template <typename T>
 class linearList{
 public:
@@ -37,6 +36,9 @@ void changeLengthID(T* &a, int oldLength, newLength){
 }
 
 
+
+
+
 template <class T>
 class arrayList:public linearList<T>{
 public:
@@ -61,7 +63,7 @@ protected:
 	//若索引theIndex无效,则抛出异常
 	void checkIndex(int theIndex) const;
 	
-	T* element;			//存储线性表元素的一位数组
+	T* element;			//存储线性表元素的一维数组
 	int arrayLength;	//一维数组的容量
 	int listSize;		//线性表元素个数
 }
@@ -169,6 +171,7 @@ void copy(iterator start, iterator end, iterator to){
 
 
 
+
 //类ArrayList的一个迭代器
 class iterator
 {
@@ -217,7 +220,7 @@ protected:
 
 
 
-//vector的实现
+/********************vector的实现****************/
 template <typename T>
 class vectorList: public linearList<T>
 {
@@ -292,8 +295,8 @@ void vectorList<T>::insert(int theIndex, const T& theElement)
 
 
 
-//线性表----链式描述
 
+/*******************线性表----链式描述*******************/
 template <class T>
 struct chainNode{
 	//数据成员
@@ -487,8 +490,7 @@ public:
 
 
 
-
-//二叉树的链表描述
+/****************二叉树的链表描述*******************/
 template<typename T>
 struct binaryTreeNode{
 	T element;
@@ -531,16 +533,18 @@ void inOrder(binaryTreeNode<T>* t){
 void inOrder2(binaryTreeNode<T>* t){
 	stack<binaryTreeNode<T>*> InStack;
 	binaryTreeNode<T>* node = t;
-	while(node)
+	while(node || !InStack.empty())
 	{
 		while(node){
 			InStack.push(node);
 			node = node->leftChild;
 		}
-		node = InStack.top();
-		InStack.pop();
-		visit(node);
-		node = node->rightChild;
+		if(!InStack.empty()){
+			node = InStack.top();
+			InStack.pop();
+			visit(node);
+			node = node->rightChild;
+		}
 	}
 }
 
@@ -556,13 +560,125 @@ void inOrder(binaryTreeNode<T>* t){
 }
 
 //层次遍历，使用队列实现
-
+template<class T>
+void leverOrder(binaryTreeNode<T>* t){
+	queue<binaryTreeNode<T>*> LeverQueue;
+	binaryTreeNode<T>* node = t;
+	
+	while(node){
+		visit(node);
+		
+		if(node->leftChild){
+			LeverQueue.push(node->leftChild);
+		}
+		if(node->rightChild){
+			LeverQueue.push(node->rightChild);
+		}
+		try{
+			node = LeverQueue.front();
+		}
+		catch(LeverQueue.empty()){
+			return;
+		}
+		LeverQueue.pop();
+	}
+}
 
 template<class T>
 void visit(binaryTreeNode<T>* x)
 {
 	cout << x->element << " ";
 }
+
+
+
+/******************抽象数据类型BinaryTree******************/
+template<class T>
+class binaryTree{
+public:
+	virtual ~binaryTree(){}
+	virtual bool empty() const = 0;
+	virtual int size() const = 0;
+	virtual void preOrder(void (*) (T*)) = 0;
+	virtual void inOrder(void (*) (T*)) = 0;
+	virtual void postOrder(void (*) (T*)) = 0;
+	virtual void leverOrder(void (*) (T*)) = 0;
+};
+
+template<class E>
+class linkedBinaryTree : public binaryTree<binaryTreeNode<E>>{
+public:
+	linkedBinaryTree(){root = nullptr; treeNodeSize = 0;}
+	~linkedBinaryTree(){erase();}
+	int height(binaryTreeNode<E>*);
+	bool empty() const {return treeNodeSize == 0}
+	int size() const {return treeNodeSize;}
+	void preOrder(void (*theVisit)(binaryTreeNode<E>*)){
+		visit = theVisit; preOrder(root);
+	}
+	void inOrder(void (*theVisit)(binaryTreeNode<E>*)){
+		visit = theVisit; inOrder(root);
+	}
+	void postOrder(void (*theVisit)(binaryTreeNode<E>*)){
+		visit = theVisit;
+		postOrder(root);
+	}
+	void leverOrder(void(*)(binaryTreeNode<E> *));
+	void erase(){
+		postOrder(dispose);
+		root = nullptr;
+		treeNodeSize = 0;
+	}
+	
+	void preOrderOutput(){
+		preOrder(output);
+		cout << endl;
+	}
+	
+	int height() const {return height(root);}
+	
+	
+private:
+	binaryTreeNode<E>* root;
+	int treeNodeSize;
+	
+	static void (*visit)(binaryTreeNode<E>* );
+	static void preOrder(binaryTreeNode<E> *t);
+	static void inOrder(binaryTreeNode<E> *t);
+	static void postOrder(binaryTreeNode<E>* t);
+	static void dispose(binaryTreeNode<E>* t) {delete t};
+	
+	static void output(binaryTreeNode<E>* t){
+		cout << t->element << " ";
+	}
+};
+
+//私有前序遍历方法
+template<class E>
+void linkedBinaryTree<E>::preOrder(binaryTreeNode<E>* t)
+{
+	if(t != nullptr){
+		linkedBinaryTree<E>::visit(t);
+		preOrder(t->leftChild);
+		preOrder(t->rightChild);
+	}
+}
+
+template<class E>
+int linkedBinaryTree<E>::height(binaryTreeNode<E>* t)
+{
+	if(t == NULL)
+		return 0;
+	int hl = height(t->leftChild);
+	int hr = height(t->rightChild);
+	if(hl > hr)
+	{
+		return ++hl;
+	}
+	else
+		return ++hr;
+}
+
 
 
 
