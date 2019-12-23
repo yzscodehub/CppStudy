@@ -176,6 +176,51 @@ void  shellSort(int array[], int lenth)
 //归并排序
 
 //堆排序
+//堆化
+void heapify(int tree[], int n, int i){
+	if(i >= n){
+		return;
+	}
+	int lc = 2 * i + 1;
+	int r2 = 2 * i + 2;
+	int max = i;
+	if(lc < n && tree[max] < tree[lc]){
+		max = lc;
+	}
+	if(rc < n && tree[max] < tree[rc]){
+		max = rc;
+	}
+	
+	if(i != max){
+		swap(&tree[i], &tree[max]);
+		heapify(tree, n, max);
+	}
+}
+//构建堆
+void build_heap(int tree[], int n){
+	int last_node = n - 1;
+	int last_node_parent = (last_node - 1) / 2;
+	for(int i = last_node_parent; i >= 0; --i){
+		heapify(tree, n, i);
+	}
+}
+
+void swap(int *num1, int *num2){
+	int temp = *num1;
+	*num1 = *num2;
+	*num2 = temp;
+}
+//堆排序
+void heap_sort(int tree[], int n){
+	build_heap(tree, n);
+	for(int i = n - 1; i >= 0; i++){
+		swap(&tree[i], &tree[0]);
+		heapify(tree, i, 0);
+	}
+}
+
+
+
 
 
 //剑指offer<7>
@@ -553,6 +598,8 @@ int getDigitSum(int num){
 	}
 	return sum;
 }
+
+
 
 
 
