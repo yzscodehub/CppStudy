@@ -488,6 +488,81 @@ public:
 
 
 
+//二叉树的链表描述
+template<typename T>
+struct binaryTreeNode{
+	T element;
+	binaryTreeNode<T> *leftChild, *rightChild;
+	
+	binaryTreeNode() {leftChild = rightChild = nullptr;}
+	binaryTreeNode(const T& theElement){
+		element(theElement);
+		leftChild = rightChild = nullptr;
+	}
+	binaryTreeNode(const T& theElement, binaryTreeNode* theLeftChild, binaryTreeNode* theRightChild){
+		element(theElement);
+		leftChild = theLeftChild;
+		rightChild = theRightChild;
+	}
+};
+
+//前序遍历
+template<class T>
+void preOrder(binaryTreeNode<T>* t){
+	if(t != nullptr)
+	{
+		visit(t);
+		preOrder(t->leftChild);
+		preOrder(t->rightChild);
+	}
+}
+
+//中序遍历递归实现
+template<class T>
+void inOrder(binaryTreeNode<T>* t){
+	if(t != nullptr)
+	{
+		inOrder(t->leftChild);
+		visit(t);
+		inOrder(t->rightChild);
+	}
+}
+//中序遍历的非递归实现
+void inOrder2(binaryTreeNode<T>* t){
+	stack<binaryTreeNode<T>*> InStack;
+	binaryTreeNode<T>* node = t;
+	while(node)
+	{
+		while(node){
+			InStack.push(node);
+			node = node->leftChild;
+		}
+		node = InStack.top();
+		InStack.pop();
+		visit(node);
+		node = node->rightChild;
+	}
+}
+
+//后续遍历
+template<class T>
+void inOrder(binaryTreeNode<T>* t){
+	if(t != nullptr)
+	{
+		inOrder(t->leftChild);
+		inOrder(t->rightChild);
+		visit(t);
+	}
+}
+
+//层次遍历，使用队列实现
+
+
+template<class T>
+void visit(binaryTreeNode<T>* x)
+{
+	cout << x->element << " ";
+}
 
 
 
