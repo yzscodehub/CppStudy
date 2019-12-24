@@ -1,4 +1,21 @@
 //剑指offer<7>
+
+//获取整形数组最大值
+int getMaxValue(const vector<int> &array)
+{
+	int max = INT_MIN;
+	for(auto val:array)
+	{
+		if(val > max)
+		{
+			max = val;
+		}
+	}
+	return max;
+}
+
+
+
 //重建二叉树
 struct BinaryTreeNode{
 	int m_nValue;
@@ -274,7 +291,7 @@ int MinInOrder(int* numbers, int index1, int index2){
 
 
 
-
+/***************************回溯法**************************/
 //矩阵中的路径<12>
 bool hasPath(char* matrix, int rows, int cols, char* str){
 	if(matrix == nullptr || rows < 1 || cols < 1 || str == nullptr){
@@ -396,9 +413,168 @@ int numberOf1(int n)
 
 
 //数值的整数次方<16>
+bool g_InvalidInput = false;
 double Power(double base, int exponent){
+	g_InvalidInput = false;
+	//如果基数为0并且指数小于0,直接返回0
+	if(equal(base, 0.0) && exponent < 0){
+		g_InvalidInput = true;
+		return 0.0;
+	}
 	
+	unsigned int absExponent = (unsigned int)(exponent);
+	//如果指数为负数，先把负数转换为正数
+	if(exponent < 0){
+		absExponent = (unsigned int)(-exponent);
+	}
+	
+	double result = PowerWithUnsignedExponent(base, absExponent);
+	//如果指数为负数,则在输出时作相应处理
+	if(exponent < 0){
+		result = 1.0 / result;
+	}
+	return result;
 }
+//实现1
+double PowerWithUnsignedExponent(double base, unsigned int exponent){
+	double result = 1.0;
+	for(int i = 1; i <= exponent; ++i){
+		result *= base;
+	}
+	return result;
+}
+//实现2
+double PowerWithUnsignedExponent(double base, unsigned int exponent){
+	if(exponent == 0){
+		return 1;
+	}
+	if(exponent == 1){
+		return base;
+	}
+	int result = PowerWithUnsignedExponent(base, exponent >> 1);
+	result *= result;
+	if(exponent & 0x1 == 1){
+		result *= base;
+	}
+	return result;
+}
+
+//打印从1到最大的n位数<17>
+//实现1
+void PrintToMaxOfNDigts(int n){
+	if(n <= 0){
+		return ;
+	}
+	
+	char* number = new char[n + 1];
+	memset(number, '0', n);
+	number[n] = '\0';
+	
+	while(!Increment(number)){
+		PrintNumber(number);
+	}
+	
+	delete [] number;
+}
+bool Increment(char* number){
+	bool isOverflow = false;
+	int nTakeOver = 0;				//进位
+	int nLength = strlen(number);
+	for(int i = nLength - 1; i >= 0; --i){
+		int nSum = number[i] - '0' + nTakeOver;
+		if(i == nLength - 1)	//最后一位加一
+			nSum++;
+		if(nSum >= 10){
+			if(i == 0)			//最高位有进位
+				isOverflow = true;
+			else{
+				nSum -= 10;
+				nTakeOver = 1;
+				number[i] = '0' + nSum;
+			}
+		}
+		else{
+			number[i] = '0' + nSum;
+			break;
+		}
+	}
+	return isOverflow;
+}
+void PrintNumber(char* number){
+	bool isBeginning0 = true;
+	int nLength = strlen(number);
+	
+	for(int i = 0; i < nLength; i++){
+		if(isBeginning0 && number[i] != '0'){
+			isBeginning0 = false;
+		}
+		if(!isBeginning0){
+			printf("%c", number[i]);
+		}
+	}
+	printf("\t");
+}
+
+//实现2
+void PrintToMaxOfNDigts(int n){
+	if(n <= 0){
+		return;
+	}
+	
+	char* number = new char[n+1];
+	number[n] = '\0';
+	
+	for(int i = 0; i < 10; i++){
+		number[0] = i + '0';
+		PrintToMaxxOfNDigitsReccursively(number, n, 0);
+	}
+	delete[] number;
+}
+
+void  PrintToMaxxOfNDigitsReccursively(char* number, int length, int index){
+	if(index == length - 1){
+		PrintNumber(number);
+		return;
+	}
+	
+	for(int i = 0; i < 10; ++i){
+		number[index + 1] = i + '0';
+		PrintToMaxxOfNDigitsReccursively(number, length, index+1);
+	}
+}
+
+
+//二叉树中序遍历的非递归实现
+//遇到一个节点就把它压栈，并去遍历它的左子树；当左子树遍历结束时，从栈顶弹出一个节点并访问它；然后按其右指针再去中序遍历该节点的右子树
+void InOrderTraversal(BinaryTreeNode* BT){
+	BinaryTreeNode* tree = BT;
+	stack<BinaryTreeNode*> TreeStack;
+	
+	while(tree || !TreeStack.empty()){
+		while(tree){
+			TreeStack.push(tree);
+			tree = tree->m_pLeft;
+		}
+		if(!TreeStack.empty()){
+			tree = TreeStack.top();
+			std::cout << tree->data << endl;;
+			TreeStack.pop();
+			tree = tree->m_pRight;
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

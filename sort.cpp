@@ -1,17 +1,3 @@
-//获取整形数组最大值
-int getMaxValue(const vector<int> &array)
-{
-	int max = INT_MIN;
-	for(auto val:array)
-	{
-		if(val > max)
-		{
-			max = val;
-		}
-	}
-	return max;
-}
-
 //冒泡排序
 void bubbleSort(vector<int> &arr, int bgn, int end)
 {
@@ -173,7 +159,6 @@ void  shellSort(int array[], int lenth)
 	}
 }
 
-//归并排序
 
 //堆排序
 //堆化
@@ -220,29 +205,10 @@ void heap_sort(int tree[], int n){
 }
 
 
+//归并排序
 
 
 
-
-//二叉树中序遍历的非递归实现
-//遇到一个节点就把它压栈，并去遍历它的左子树；当左子树遍历结束时，从栈顶弹出一个节点并访问它；然后按其右指针再去中序遍历该节点的右子树
-void InOrderTraversal(BinaryTreeNode* BT){
-	BinaryTreeNode* tree = BT;
-	stack<BinaryTreeNode*> TreeStack;
-	
-	while(tree || !TreeStack.empty()){
-		while(tree){
-			TreeStack.push(tree);
-			tree = tree->m_pLeft;
-		}
-		if(!TreeStack.empty()){
-			tree = TreeStack.top();
-			std::cout << tree->data << endl;;
-			TreeStack.pop();
-			tree = tree->m_pRight;
-		}
-	}
-}
 
 
 
