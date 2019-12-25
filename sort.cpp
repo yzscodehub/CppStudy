@@ -1,4 +1,21 @@
 //冒泡排序
+//平均时间复杂度：O(n^2)	最好情况：O(n)	最坏情况：O(n^2)
+//辅助空间：O(1)
+//稳定性：稳定
+void bubbleSort(int arr[], int n)
+{
+	bool swapState = true;
+	int i, j, temp;
+	for(i = 0; i < n - 1 && swapState == true; i++){	//循环n-1次
+		swapState = false;
+		for(j = 0; j < n- i - 1; j++){					//每遍循环需要处理的无序部分
+			if(arr[j] > arr[j + 1]){
+				swap(&arr[j], &swap[j + 1]);
+				swap = true;
+			}
+		}
+	}
+}
 void bubbleSort(vector<int> &arr, int bgn, int end)
 {
 	bool isLoop = true;
@@ -15,10 +32,49 @@ void bubbleSort(vector<int> &arr, int bgn, int end)
 		}
 	}
 }
+//鸡尾酒排序
+void CocktailSort(int arr[], int n){
+	bool swapped = true;
+	int i, left = 0, right = n-1;
+	while(swapped){
+		swapped = false;
+		for(i = left; i < n-1; i++){	//从左边找一个最大的放到右边
+			if(arr[i] > arr[i+1]){
+				swap(&arr[i], &arr[i+1]);
+				swapped = true;
+			}
+		}
+		right--;
+		for(i = right; i > left; i--){	//从右边找一个最小的放到左边
+			if(arr[i] < arr[i-1]){
+				swap(&arr[i], &arr[i-1]);
+				swapped = true;
+			}
+		}
+		left++;
+	}
+}
 
 
-//选择排序
-void selectSort(vector<int> &arr, int bgn, int end)
+//简单选择排序
+//平均时间复杂度：O(n^2)	最好情况：O(n^2)	最坏情况：O(n^2)
+//辅助空间：O(1)
+//稳定性：不稳定
+void selectionSort(int arr[], int len){
+	int i, j, Min;
+	for(i = 0; i < len-1; i++){
+		Min = i;
+		for(j = i+1; j < len-1; j++){
+			if(arr[j] < arr[Min]){
+				Min = j;
+			}
+		}
+		if(Min != i){
+			swap(&arr[i], &arr[Min]);
+		}
+	}
+}
+void selectionSort(vector<int> &arr, int bgn, int end)
 {
 	for(int i = bgn; i <= end; ++i)
 	{
@@ -36,6 +92,7 @@ void selectSort(vector<int> &arr, int bgn, int end)
 		}
 	}
 }
+
 
 //快速排序
 //实现1
@@ -115,6 +172,22 @@ void QuickSort(int data[], int length, int start, int end){
 
 
 //插入排序
+//平均时间复杂度：O(n^2)	最好情况：O(n)	最坏情况：O(n^2)
+//最坏的空间复杂度：O(n)
+//辅助空间：O(1)
+//稳定性：稳定
+void insertSort(int arr[], int n){
+	int i, j, key;
+	for(i = 1; i < n-1; i++){
+		key = arr[i];
+		j = i - 1;
+		while(j >= 0 && arr[j] > key){
+			arr[j+1] = arr[j];
+			j--;
+		}
+		arr[j+1] = key;
+	}
+}
 void  insertSort(vector<int> &arr, int bgn, int end)
 {
 	for(int i = 0; i < end; ++i)

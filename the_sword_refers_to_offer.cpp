@@ -526,12 +526,12 @@ void PrintToMaxOfNDigts(int n){
 	
 	for(int i = 0; i < 10; i++){
 		number[0] = i + '0';
-		PrintToMaxxOfNDigitsReccursively(number, n, 0);
+		PrintToMaxOfNDigitsReccursively(number, n, 0);
 	}
 	delete[] number;
 }
 
-void  PrintToMaxxOfNDigitsReccursively(char* number, int length, int index){
+void  PrintToMaxOfNDigitsReccursively(char* number, int length, int index){
 	if(index == length - 1){
 		PrintNumber(number);
 		return;
@@ -539,9 +539,97 @@ void  PrintToMaxxOfNDigitsReccursively(char* number, int length, int index){
 	
 	for(int i = 0; i < 10; ++i){
 		number[index + 1] = i + '0';
-		PrintToMaxxOfNDigitsReccursively(number, length, index+1);
+		PrintToMaxOfNDigitsReccursively(number, length, index+1);
 	}
 }
+
+//删除链表的节点<18>
+//题目一：在O(1)时间内删除链表节点
+struct ListNode{
+	int m_nValue;
+	ListNode* m_pNext;
+};
+
+void DeleteNode(ListNode** pListHead, ListNode* pToBeDelete){
+	if(!pListHead || !pToBeDelete)
+		return;
+	if(pToBeDelete->m_pNext)
+	{
+		pLisNode* pDelete = pToBeDelete->m_pNext;
+		pToBeDelete->m_nValue = pToBeDelete->m_nValue;
+		pToBeDelete->m_pNext = pDelete->m_pNext;
+		delete pDelete;
+		pDelete = nullptr;
+	}
+	else if(*pLisNode == pToBeDelete){
+		delete pToBeDelete;
+		pToBeDelete = nullptr;
+		*pLisNode = nullptr;
+	}
+	else{
+		/*
+		pLisNode* pPreNode = *pLisNode;
+		pLisNode* pNode = pPreNode->m_pNext;
+		while(pNode->m_pNext != nullptr){
+			pPreNode = pNode;
+			pNode = pNode->m_pNext;
+		}
+		pPreNode->m_pNext = nullptr;
+		delete pNode;
+		pNode = nullptr;
+		*/
+		
+		pLisNode* pNode = *pListHead;
+		while(pNode->m_pNext != pToBeDelete){
+			pNode = pNode->m_pNext;
+		}
+		pNode->m_pNext = nullptr;
+		delete->pToBeDelete;
+		pToBeDelete = nullptr;
+	}
+}
+
+//题目二：删除链表中重复节点
+void DeleteDuplication(ListNode** pHead){
+	if(pHead == nullptr || *pHead == nullptr){
+		return;
+	}
+	
+	ListNode* pPreNode = nullptr;
+	ListNode* pNode = *pHead; 
+	while(pNode != nullptr){
+		ListNode* pNext = pNode->m_pNext;
+		bool needDelete = false;
+		if(pNext != nullptr && pNext->m_nValue == pNode->m_nValue){
+			neetDelete = true;
+		}
+		
+		if(!needDelete){
+			pPreNode = pNode;
+			pNode = pNode->m_pNext;
+		}
+		else{
+			int value = pNode->m_nValue;
+			ListNode* pToBedel = pNode;
+			while(pToBedel != nullptr && pToBedel->m_nValue == value){
+				pNext = pToBedel->m_pNext;
+				
+				delete pToBedel;
+				pToBedel = nullptr;
+				
+				pToBeDel = pNext;
+			}
+			if(pPreNode == nullptr){
+				*pHead = pNext;
+			}
+			else{
+				pPreNode->m_pNext = pNext;
+			}
+			pNode = pNext;
+		}
+	}
+}
+
 
 
 //二叉树中序遍历的非递归实现
