@@ -178,7 +178,7 @@ void QuickSort(int data[], int length, int start, int end){
 //稳定性：稳定
 void insertSort(int arr[], int n){
 	int i, j, key;
-	for(i = 1; i < n-1; i++){
+	for(i = 1; i < n; i++){
 		key = arr[i];
 		j = i - 1;
 		while(j >= 0 && arr[j] > key){
@@ -204,6 +204,10 @@ void  insertSort(vector<int> &arr, int bgn, int end)
 		}
 	}
 }
+//插入排序的改进：二分插入排序
+//平均时间复杂度：O(n^2)	最好情况：O(nlogn)	最坏情况：O(n^2)
+//辅助空间：O(1)
+//稳定性：稳定
 
 //希尔排序
 void  shellSort(int array[], int lenth)
