@@ -788,28 +788,35 @@ bool BF(const char* str1, const char* str2){
 	if(str1 == NULL || str2 == NULL){
 		return false;
 	}
-	int length = strlen(str1);
+	int length1 = strlen(str1);
 	int length2 = strlen(str2)
 	int i, j;
-	for(i = 0; i < length; i++){
-		if(str[i] == str[j] && j < length2){
-			if( j == length2 - 1)
-			{
-				break;
-			}
+	for(i = 0; i < length1; i++){
+		int k = i;
+		j = 0;
+		while(str1[k] == str2[j] && j < length2){
 			j++;
-			
+			k++;
 		}
-		else{
-			j = 0;
+		if(j == length2){
+			return true;
 		}
+		/*
+		k = i;
+		for(j = 0; j < length2; j++){
+			 if(str1[k] == str2[j]){
+				 k++;
+			 }
+			 else{
+				 break;
+			 }
+		}
+		if(j == length2){
+			return ture;
+		}
+		*/
 	}
-	if(j = length2){
-		return true;
-	}
-	else{
-		return false;
-	}
+	return false;
 }
 //KMP算法
 
